@@ -4,7 +4,7 @@ const commando = require('discord.js-commando');
 
 const search = new SearchEngine()
 
-module.exports = class UserInfoCommand extends commando.Command {
+module.exports = class MusicAddCommand extends commando.Command {
     constructor(client) {
         super(client, {
             name: 'add',
@@ -25,17 +25,17 @@ module.exports = class UserInfoCommand extends commando.Command {
         });
     }
 
-    async run(msg, { request }) {
-        const settings = msg.guild.settings;
-        if (!settings.get('audioDispatcher', null)) settings.set('audioDispatcher', null);
-        if (!settings.get('queue', null)) settings.set('queue', new Array());
-        if (!settings.get('history', null)) settings.set('history', new Array());
-        if (!settings.get('volume', null)) settings.set('volume', 50);
-
-        console.log('hfk');
-
+    async run(msg, args) {
         try {
-            let songs = await search.search(msg, request);
+            const settings = msg.guild.settings;
+            if (!settings.get('audioDispatcher', null)) settings.set('audioDispatcher', null);
+            if (!settings.get('queue', null)) settings.set('queue', new Array());
+            if (!settings.get('history', null)) settings.set('history', new Array());
+            if (!settings.get('volume', null)) settings.set('volume', 50);
+
+            console.log('hfk');
+
+            let songs = await search.search(msg, args.request);
             var queue = settings.get('queue', null);
             console.log(queue);
 

@@ -1,7 +1,7 @@
 const stripIndents = require('common-tags').stripIndents;
 const commando = require('discord.js-commando');
 
-module.exports = class UserInfoCommand extends commando.Command {
+module.exports = class MusicJoinCommand extends commando.Command {
     constructor(client) {
         super(client, {
             name: 'join',
@@ -14,7 +14,7 @@ module.exports = class UserInfoCommand extends commando.Command {
 
             args: [
                 {
-                    key: 'user',
+                    key: 'member',
                     prompt: 'Please specify a user',
                     type: 'member',
                     default: ''
@@ -23,12 +23,12 @@ module.exports = class UserInfoCommand extends commando.Command {
         });
     }
 
-    async run(msg, { user }) {
+    async run(msg, { member }) {
         var member;
-        if ((user === '') || !user) {
+        if ((member === '') || !member) {
             member = msg.member;
         } else {
-            member = user;
+            member = member;
             console.log(member);
 
         }
