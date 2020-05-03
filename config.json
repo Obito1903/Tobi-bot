@@ -1,0 +1,9 @@
+{
+    "ownerId": "yourId",
+    "token": "BotTokken",
+    "ytApi": "YouTubeAPIKeyHere",
+    "prefix": "to.",
+    "bitRate": 12000,
+    "maxHistory": 50,
+    "maxQueue": 100
+}
