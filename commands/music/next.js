@@ -4,8 +4,8 @@ const commando = require('discord.js-commando');
 module.exports = class MusicNextCommand extends commando.Command {
     constructor(client) {
         super(client, {
-            name: 'next',
-            aliases: ['next'],
+            name: 'm.next',
+            aliases: ['m.next'],
             group: 'music',
             memberName: 'next',
             description: 'Prompt the bot to play music from youtube',
@@ -25,16 +25,17 @@ module.exports = class MusicNextCommand extends commando.Command {
             var queue = settings.get('queue', null);
             if (queue.length > 0) {
                 let song = queue[0];
-                settings.get('queue', queue.shift());
-                if (song) return this.client.registry.resolveCommand('playnow').run(msg, song);
+                queue.shift();
+                settings.set('queue', queue);
+                if (song) return this.client.registry.resolveCommand('playnow').run(msg, song).catch(err => console.log(err));
                 /*
                 if (this.autoLeaveIn !== 0) {
                     this.timeout = setTimeout(() => this.disconnectVoiceConnection(msg), this.autoLeaveIn);
                 }
                 */
             }
-            this.client.registry.resolveCommand('stop').run(msg, args);
-            message.channel.send('Queue is empty, playback finished.');
+            //this.client.registry.resolveCommand('stop').run(msg, args);
+            msg.channel.send('Queue is empty.');
         } catch (err) {
             console.log('Erreur next.js ' + err);
         }

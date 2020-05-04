@@ -4,8 +4,8 @@ const commando = require('discord.js-commando');
 module.exports = class MusicClearCommand extends commando.Command {
     constructor(client) {
         super(client, {
-            name: 'clear',
-            aliases: ['clear'],
+            name: 'm.clear',
+            aliases: ['m.clear', 'm.clearqueue'],
             group: 'music',
             memberName: 'clear',
             description: 'Prompt the bot to play music from youtube',

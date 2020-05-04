@@ -18,6 +18,8 @@ client.setProvider(
     }).then(db => new Commando.SQLiteProvider(db))
 ).catch(console.error);
 
+client.audioDispatcherList = new Map();
+
 client.registry
     .registerDefaultTypes()
     .registerGroups([

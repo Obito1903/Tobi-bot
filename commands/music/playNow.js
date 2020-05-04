@@ -5,8 +5,8 @@ const commando = require('discord.js-commando');
 module.exports = class MusicPlayNowCommand extends commando.Command {
     constructor(client) {
         super(client, {
-            name: 'playnow',
-            aliases: ['playnow'],
+            name: 'm.playnow',
+            aliases: ['m.playnow'],
             group: 'music',
             memberName: 'playnow',
             description: 'Prompt the bot to play music from youtube',
@@ -24,9 +24,11 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
     }
 
     async run(msg, args) {
-        const settings = msg.guild.settings;
-        const guild = msg.guild;
         try {
+            const audioDispatcher = this.client.audioDispatcherList.get(msg.guild.id);
+            const settings = msg.guild.settings;
+            const guild = msg.guild;
+
             const voiceConnection = this.client.voice.connections.find(val => val.channel.guild.id === msg.guild.id);
 
             const dOptions = {
@@ -36,18 +38,11 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
                 type: 'opus',
                 highWaterMark: 1
             }
-            let audioDispatcher = voiceConnection.play(await ytdl(args.url), dOptions);
-            settings.set('audioDispatcher', audioDispatcher);
-            /*
-            if (guild.history[0] !== args) {
-                guild.history.unshift(args);
-                while (guild.history.length > client.config.maxHistory) guild.history.pop();
-            }
-            */
-            audioDispatcher.on('speaking', (speaking) => {
+            audioDispatcher.dispatcher = voiceConnection.play(await ytdl(args.url), dOptions)
+            audioDispatcher.dispatcher.on('speaking', (speaking) => {
                 setTimeout(() => {
                     if (!speaking) {
-                        this.client.registry.resolveCommand('next').run(msg, args);
+                        this.client.registry.resolveCommand('next').run(msg, args).catch(err => console.log(err));
                     }
                 }, 2000);
             });

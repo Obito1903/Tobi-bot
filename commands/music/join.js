@@ -4,8 +4,8 @@ const commando = require('discord.js-commando');
 module.exports = class MusicJoinCommand extends commando.Command {
     constructor(client) {
         super(client, {
-            name: 'join',
-            aliases: ['join'],
+            name: 'm.join',
+            aliases: ['m.join'],
             group: 'music',
             memberName: 'join',
             description: 'Prompt the bot to join your voice channel',
@@ -42,13 +42,19 @@ module.exports = class MusicJoinCommand extends commando.Command {
         if (!voiceConnection) {
             if (voiceChannel && voiceChannel.joinable) {
                 voiceChannel.join();
+                msg.reply(stripIndents`
+                Joined channel.
+                `);
             }
         } else {
             voiceConnection.voice.channel.leave
-            if (voiceChannel && voiceChannel.joinable) voiceChannel.join();
+            if (voiceChannel && voiceChannel.joinable) {
+                voiceChannel.join();
+                msg.reply(stripIndents`
+                Joined channel.
+                `);
+            }
         }
-        msg.reply(stripIndents`
-            Joined channel.
-            `);
+
     }
 };

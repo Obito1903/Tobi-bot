@@ -1,0 +1,38 @@
+const commando = require('discord.js-commando');
+
+module.exports = class MusicPlayNowCommand extends commando.Command {
+    constructor(client) {
+        super(client, {
+            name: 'm.volume',
+            group: 'music',
+            memberName: 'volume',
+            description: 'Prompt the bot to play music from youtube',
+            examples: ['play url'],
+            guildOnly: true,
+
+            args: [
+                {
+                    key: 'volume',
+                    prompt: 'Please specify a volume between 0 and 100',
+                    type: 'integer',
+                    min: 0,
+                    max: 100
+                }
+            ]
+        });
+    }
+
+    async run(msg, { volume }) {
+        try {
+            const audioDispatcher = this.client.audioDispatcherList.get(msg.guild.id);
+            const settings = msg.guild.settings;
+
+            settings.set('volume', volume);
+            msg.channel.send(`Setting volume to ${volume}.`);
+            if (audioDispatcher) audioDispatcher.dispatcher.setVolume(volume / 100);
+        } catch (err) {
+            console.log('Erreur playnow.js ' + err);
+        }
+
+    }
+};

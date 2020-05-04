@@ -4,8 +4,8 @@ const commando = require('discord.js-commando');
 module.exports = class MusicPlayCommand extends commando.Command {
     constructor(client) {
         super(client, {
-            name: 'play',
-            aliases: ['play'],
+            name: 'm.play',
+            aliases: ['m.play'],
             group: 'music',
             memberName: 'play',
             description: 'Prompt the bot to play music from youtube',
@@ -30,14 +30,23 @@ module.exports = class MusicPlayCommand extends commando.Command {
         You must be in a voice channel to run this command.
         `);
         try {
+
+            if (!this.client.audioDispatcherList.has(msg.guild.id)) {
+                this.client.audioDispatcherList.set(msg.guild.id, {
+                    id: msg.guild.id,
+                    dispatcher: null,
+                });
+            }
+            const audioDispatcher = this.client.audioDispatcherList.get(msg.guild.id);
+
             if (args.request.length != 0) {
                 console.log('prout');
-                this.client.registry.resolveCommand('add').run(msg, args, true);
+                this.client.registry.resolveCommand('add').run(msg, args, true).catch(err => console.log(err));
             }
-            this.client.registry.resolveCommand('join').run(msg, '');
+            this.client.registry.resolveCommand('join').run(msg, '').catch(err => console.log(err));
 
-            if (!settings.get('audioDispatcher', null)) {
-                this.client.registry.resolveCommand('next').run(msg, args);
+            if (!audioDispatcher.dispatcher) {
+                this.client.registry.resolveCommand('next').run(msg, args).catch(err => console.log(err));
             }
 
         } catch (err) {
