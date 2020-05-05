@@ -10,7 +10,6 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
             group: 'music',
             memberName: 'playnow',
             description: 'Play the requested music',
-            examples: ['play url'],
             guildOnly: true,
             hiden: true,
 

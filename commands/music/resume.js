@@ -7,8 +7,8 @@ module.exports = class MusicAddCommand extends commando.Command {
             aliases: ['m.resume'],
             group: 'music',
             memberName: 'resume',
-            description: 'Prompt the bot to play music from youtube',
-            examples: ['play url'],
+            description: 'Resume the audio playback',
+            examples: ['m.resume'],
             guildOnly: true
         });
     }

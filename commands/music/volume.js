@@ -6,8 +6,8 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
             name: 'm.volume',
             group: 'music',
             memberName: 'volume',
-            description: 'Prompt the bot to play music from youtube',
-            examples: ['play url'],
+            description: 'Define bot volume',
+            examples: ['m.volume 10'],
             guildOnly: true,
 
             args: [

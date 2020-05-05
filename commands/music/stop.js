@@ -8,8 +8,8 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
             aliases: ['m.stop'],
             group: 'music',
             memberName: 'stop',
-            description: 'Prompt the bot to play music from youtube',
-            examples: ['play url'],
+            description: 'Stop audio playback',
+            examples: ['m.stop'],
             guildOnly: true
         });
     }

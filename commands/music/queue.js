@@ -8,7 +8,7 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
             group: 'music',
             memberName: 'queue',
             description: 'Display the queue if the current Guild',
-            examples: ['play url'],
+            examples: ['m.queue'],
             guildOnly: true,
         });
     }
