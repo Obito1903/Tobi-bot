@@ -1,0 +1,33 @@
+{
+  "name": "Tobi-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js-commando": "^0.11.0-dev",
+    "discord.js": "^12.2.0",
+    "moment-duration-format": "^2.3.2",
+    "moment": "^2.25.1",
+    "ffmpeg-static": "^4.2.0",
+    "node-superfetch": "^0.1.10",
+    "prism-media": "^1.2.2",
+    "sqlite": "^4.0.7",
+    "sqlite3": "^4.2.0",
+    "ytdl-core-discord": "^1.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Obito1903/Tobi-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Obito1903/Tobi-bot/issues"
+  },
+  "homepage": "https://github.com/Obito1903/Tobi-bot#readme"
+}
