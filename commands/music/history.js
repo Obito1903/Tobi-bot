@@ -3,12 +3,12 @@ const commando = require('discord.js-commando');
 module.exports = class MusicPlayNowCommand extends commando.Command {
     constructor(client) {
         super(client, {
-            name: 'm.queue',
-            aliases: ['m.queue'],
+            name: 'm.history',
+            aliases: ['m.history'],
             group: 'music',
-            memberName: 'queue',
-            description: 'Display the queue if the current Guild',
-            examples: ['play url'],
+            memberName: 'history',
+            description: 'Display the guild music history',
+            examples: ['m.history'],
             guildOnly: true,
         });
     }
@@ -17,17 +17,17 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
         try {
             const settings = msg.guild.settings;
 
-            let queue = settings.get('queue', null);
-            let list = "";
-            if (queue.length === 0) {
-                list = 'Queue empty';
+            let history = settings.get('history', null);
+            let list = '';
+            if (history.length === 0) {
+                list = 'History empty';
             }
-            queue.forEach((element, index) => {
+            history.forEach((element, index) => {
                 list = list.concat(`\n ${index + 1}- `, element.title)
             });
             msg.channel.send({
                 "embed": {
-                    "title": "Music queue",
+                    "title": "Music history",
                     "color": this.client.config.color,
                     "footer": {
                         "icon_url": `${this.client.user.avatarURL()}`,

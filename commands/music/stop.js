@@ -16,14 +16,17 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
 
     async run(msg, args) {
         try {
-            const audioDispatcher = this.client.audioDispatcherList.get(msg.guild.id).dispatcher;
-            if (!audioDispatcher) return msg.channel.send('Nothing playing right now.');
-            audioDispatcher.pause();
-            audioDispatcher.destroy();
-            audioDispatcher = null;
-            msg.channel.send('Playback stopped.');
-            settings.set('queue', new Array());
-            msg.channel.send('Queue is now empty.');
+            let audioDispatcher = this.client.audioDispatcherList.get(msg.guild.id);
+            if (!audioDispatcher.dispatcher) return msg.channel.send('Nothing playing right now.');
+            audioDispatcher.dispatcher.pause();
+            audioDispatcher.dispatcher.destroy();
+            audioDispatcher.dispatcher = null;
+            msg.channel.send({
+                "embed": {
+                    "description": `<@${msg.author.id}> Playback stopped.`,
+                    "color": this.client.config.color,
+                }
+            });
         } catch (err) {
             console.log('Erreur stop.js ' + err);
         }

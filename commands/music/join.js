@@ -9,7 +9,7 @@ module.exports = class MusicJoinCommand extends commando.Command {
             group: 'music',
             memberName: 'join',
             description: 'Prompt the bot to join your voice channel',
-            examples: ['join', 'join @user'],
+            examples: ['m.join', 'm.join @user'],
             guildOnly: true,
 
             args: [
@@ -35,26 +35,21 @@ module.exports = class MusicJoinCommand extends commando.Command {
 
         const voiceChannel = member.voice.channel;
 
-        if (!voiceChannel) return msg.reply(stripIndents`
-            You must be in a voice channel to run this command.
-            `);
+        if (!voiceChannel) return msg.channel.send({
+            "embed": {
+                "description": `<@${msg.author.id}> You must be in a voice channel.`,
+                "color": this.client.config.color,
+            }
+        });
         const voiceConnection = this.client.voice.connections.find(val => val.channel.guild.id === msg.guild.id);
-        if (!voiceConnection) {
-            if (voiceChannel && voiceChannel.joinable) {
-                voiceChannel.join();
-                msg.reply(stripIndents`
-                Joined channel.
-                `);
-            }
-        } else {
-            voiceConnection.voice.channel.leave
-            if (voiceChannel && voiceChannel.joinable) {
-                voiceChannel.join();
-                msg.reply(stripIndents`
-                Joined channel.
-                `);
-            }
+        if (voiceChannel && voiceChannel.joinable) {
+            if (voiceConnection) voiceConnection.voice.channel.leave;
+            voiceChannel.join().then(conn => msg.channel.send({
+                "embed": {
+                    "description": `<@${msg.author.id}> Joined channel.`,
+                    "color": this.client.config.color,
+                }
+            }));
         }
-
     }
 };

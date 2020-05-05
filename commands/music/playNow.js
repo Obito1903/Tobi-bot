@@ -9,9 +9,10 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
             aliases: ['m.playnow'],
             group: 'music',
             memberName: 'playnow',
-            description: 'Prompt the bot to play music from youtube',
+            description: 'Play the requested music',
             examples: ['play url'],
             guildOnly: true,
+            hiden: true,
 
             args: [
                 {
@@ -25,12 +26,11 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
 
     async run(msg, args) {
         try {
-            const audioDispatcher = this.client.audioDispatcherList.get(msg.guild.id);
+            let audioDispatcher = this.client.audioDispatcherList.get(msg.guild.id);
             const settings = msg.guild.settings;
             const guild = msg.guild;
 
             const voiceConnection = this.client.voice.connections.find(val => val.channel.guild.id === msg.guild.id);
-
             const dOptions = {
                 volume: settings.get('volume', 50) / 100,
                 bitrate: this.client.config.bitRate,
@@ -38,13 +38,22 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
                 type: 'opus',
                 highWaterMark: 1
             }
-            audioDispatcher.dispatcher = voiceConnection.play(await ytdl(args.url), dOptions)
-            audioDispatcher.dispatcher.on('speaking', (speaking) => {
-                setTimeout(() => {
-                    if (!speaking) {
-                        this.client.registry.resolveCommand('next').run(msg, args).catch(err => console.log(err));
+            audioDispatcher.dispatcher = voiceConnection.play(await ytdl(args.url), dOptions);
+            audioDispatcher.playing = args;
+            msg.channel.send({
+                "embed": {
+                    "title": `Playing`,
+                    "description": `[${args.title}](${args.url}) [<@${args.requester}>]`,
+                    "color": this.client.config.color,
+                    "footer": {
+                        "icon_url": `${this.client.user.avatarURL()}`,
+                        "text": `${this.client.config.prefix}help`
                     }
-                }, 2000);
+                }
+            });
+            console.log('playind :' + args.url);
+            audioDispatcher.dispatcher.on('finish', (speaking) => {
+                this.client.registry.resolveCommand('m.next').run(msg, args).catch(err => console.log(err));
             });
 
         } catch (err) {

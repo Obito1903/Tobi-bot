@@ -84,19 +84,36 @@ module.exports = class Search {
         let searchString = query.trim();
         let songs = [];
         let note;
+        let botMsg;
         if (searchString.includes('youtu.be/') || searchString.includes('youtube.com/')) {
             if (searchString.includes('&')) searchString = searchString.split('&')[0];
             if (searchString.includes('watch') || searchString.includes('youtu.be/')) {
-                msg.channel.send('*~Searching for the YouTube URL~*');
+                msg.channel.send({
+                    "embed": {
+                        "description": `Searching for the YouTube URL...`,
+                        "color": config.color,
+                    }
+                }).then(msg => botMsg = msg);;
                 songs = await this.getSongViaUrl(searchString);
             } else if (searchString.includes('playlist')) {
-                msg.channel.send('*~Searching for the YouTube playlist~*');
+                msg.channel.send({
+                    "embed": {
+                        "description": `Searching for the YouTube playlist...`,
+                        "color": config.color,
+                    }
+                }).then(msg => botMsg = msg);;
                 songs = await this.getSongsViaPlaylistUrl(searchString);
             }
         } else {
-            msg.channel.send('*~Searching for the search query~*');
+            msg.channel.send({
+                "embed": {
+                    "description": `Searching for the search query...`,
+                    "color": config.color,
+                }
+            }).then(msg => botMsg = msg);
             songs = await this.getSongsViaSearchQuery(query);
         }
+        botMsg.delete();
         return songs;
     }
 

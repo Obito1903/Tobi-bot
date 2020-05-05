@@ -11,14 +11,14 @@ module.exports = class MusicAddCommand extends commando.Command {
             aliases: ['m.add'],
             group: 'music',
             memberName: 'add',
-            description: 'Prompt the bot to play music from youtube',
-            examples: ['play url'],
+            description: 'Add a song to the playlist',
+            examples: ['m.add url', 'm.add song name'],
             guildOnly: true,
 
             args: [
                 {
                     key: 'request',
-                    prompt: 'Please specify a valid url',
+                    prompt: 'Please specify a valid url or name',
                     type: 'string'
                 }
             ]
@@ -32,13 +32,20 @@ module.exports = class MusicAddCommand extends commando.Command {
             if (!settings.get('history', null)) settings.set('history', new Array());
             if (!settings.get('volume', null)) settings.set('volume', 50);
 
-            console.log('hfk');
-
             let songs = await search.search(msg, args.request).catch(err => console.log(err));
             let queue = settings.get('queue', null);
             if (songs.length + queue.length > this.client.config.maxQueue) {
-                if (songs.length === 1) return msg.channel.send('Queue is full.');
-                msg.channel.send('Playlist has been shortened.');
+                if (songs.length === 1) return msg.channel.send({
+                    "embed": {
+                        "title": "Queue is full",
+                        "description": "The Queue has been shortened",
+                        "color": this.client.config.color,
+                        "footer": {
+                            "icon_url": `${this.client.user.avatarURL()}`,
+                            "text": `${this.client.config.prefix}help`
+                        }
+                    }
+                });
                 songs = songs.slice(0, this.client.config.maxQueue - queue.length);
             }
 
@@ -52,10 +59,30 @@ module.exports = class MusicAddCommand extends commando.Command {
             console.log(`[QUEUE] SERVERID:${msg.guild.id} Added ${songs.length} songs.`);
 
             if (songs.length > 1) {
-                msg.channel.send(`Added to queue: ${songs.length} songs`);
+                msg.channel.send({
+                    "embed": {
+                        "title": `Added to queue: ${songs.length} songs`,
+                        "color": this.client.config.color,
+                        "footer": {
+                            "icon_url": `${this.client.user.avatarURL()}`,
+                            "text": `${this.client.config.prefix}help`
+                        }
+                    }
+                });
             } else {
-                msg.channel.send(`Added to queue: [${songs[0].title}](${songs[0].url})`);
+                msg.channel.send({
+                    "embed": {
+                        "title": `Queued`,
+                        "description": `[${songs[0].title}](${songs[0].url}) [<@${songs[0].requester}>]`,
+                        "color": this.client.config.color,
+                        "footer": {
+                            "icon_url": `${this.client.user.avatarURL()}`,
+                            "text": `${this.client.config.prefix}help`
+                        }
+                    }
+                });
             }
+            msg.delete();
         } catch (err) {
             console.log('Erreur add.js ' + err);
         }

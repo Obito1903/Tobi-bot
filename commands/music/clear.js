@@ -8,8 +8,8 @@ module.exports = class MusicClearCommand extends commando.Command {
             aliases: ['m.clear', 'm.clearqueue'],
             group: 'music',
             memberName: 'clear',
-            description: 'Prompt the bot to play music from youtube',
-            examples: ['play url'],
+            description: 'Clear the queue',
+            examples: ['m.clear'],
             guildOnly: true
         });
     }
@@ -18,9 +18,12 @@ module.exports = class MusicClearCommand extends commando.Command {
         const settings = msg.guild.settings;
 
         settings.set('queue', new Array());
-        msg.reply(stripIndents`
-        Queue cleared.
-        `);
+        msg.channel.send({
+            "embed": {
+                "description": `Searching for the YouTube URL...`,
+                "color": this.client.config.color,
+            }
+        }).then(msg => msg.delete(1000));
         console.log(settings.get('queue', null));
 
     }

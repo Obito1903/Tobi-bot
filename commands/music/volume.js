@@ -28,11 +28,15 @@ module.exports = class MusicPlayNowCommand extends commando.Command {
             const settings = msg.guild.settings;
 
             settings.set('volume', volume);
-            msg.channel.send(`Setting volume to ${volume}.`);
+            msg.channel.send({
+                "embed": {
+                    "description": `<@${msg.author.id}> Setting volume to ${volume}.`,
+                    "color": this.client.config.color,
+                }
+            });
             if (audioDispatcher) audioDispatcher.dispatcher.setVolume(volume / 100);
         } catch (err) {
             console.log('Erreur playnow.js ' + err);
         }
-
     }
 };

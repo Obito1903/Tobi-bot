@@ -1,7 +1,5 @@
 const commando = require('discord.js-commando');
 
-const search = new SearchEngine()
-
 module.exports = class MusicAddCommand extends commando.Command {
     constructor(client) {
         super(client, {
@@ -18,13 +16,28 @@ module.exports = class MusicAddCommand extends commando.Command {
     async run(msg, args) {
         try {
             const audioDispatcher = this.client.audioDispatcherList.get(msg.guild.id);
-            if (!audioDispatcher) {
-                msg.channel.send('Nothing playing right now.');
+            if (!audioDispatcher || !audioDispatcher.dispatcher) {
+                msg.channel.send({
+                    "embed": {
+                        "description": `<@${msg.author.id}> Nothing is playing right now.`,
+                        "color": this.client.config.color,
+                    }
+                });
             } else if (!audioDispatcher.dispatcher.paused) {
-                msg.channel.send('Music already playing.');
+                msg.channel.send({
+                    "embed": {
+                        "description": `<@${msg.author.id}> Music already playing.`,
+                        "color": this.client.config.color,
+                    }
+                });
             } else {
                 audioDispatcher.dispatcher.resume();
-                msg.channel.send('Playback resumed.');
+                msg.channel.send({
+                    "embed": {
+                        "description": `<@${msg.author.id}> Playback resumed.`,
+                        "color": this.client.config.color,
+                    }
+                });
             }
         } catch (err) {
             console.log('Erreur add.js ' + err);
